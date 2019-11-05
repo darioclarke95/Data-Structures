@@ -107,10 +107,10 @@ function LinkedList() {
       size++;
     },
 
-    fromArray(array) {
-      if (isArray(array)) {
-        for (let val in array) {
-          add(val);
+    addArray(array) {
+      if (Array.isArray(array)) {
+        for (var i = 0; i < array.length; i++) {
+             this.append(array[i]);
         }
       }
     },
@@ -197,12 +197,83 @@ function LinkedList() {
         prev.nextNode = toGo.nextNode;
       }
       size--;
+    },
+    
+    swap(index1, index2) {
+      //If there are no elements or only 1 we can't swap anything     
+      if (size < 2) {
+        return;
+      }
+      
+      //Invalid indices
+      if(isNaN(index1) || isNaN(index2)){
+        return;
+      }
+      
+      if(index1 < 0 || index1 > size -1 || index2 < 0 || index2 > size-1) {
+        return;
+      }
+      
+      //If you've given me the same index twice
+      if(index1 == index2) {
+        return;
+      }
+      
+      var prev1 = null;
+      var prev2 = null;
+      var toSwap1 = null;
+      var toSwap2 = null;
+      
+      //Find the nodes
+      
+      //Finding node at index 1
+      var pos = 0;
+      toSwap1 = head;
+      
+      while (pos < index1) {
+        prev1 = toSwap1;
+        toSwap1 = toSwap1.nextNode;
+        pos++
+      }
+      
+      //Finding node at index 2
+      pos = 0;
+      toSwap2 = head;
+      
+      while(pos < index2) {
+        prev2 = toSwap2;
+        toSwap2 = toSwap2.nextNode;
+        pos++;
+      }
+      
+      //Swap
+      //make previous point to the other node 
+      //make node point to what the other was pointing to
+      if(prev1 === null) { //The first node to be swapped is the head
+        head = toSwap2;
+        prev2.nextNode = toSwap1;
+      } else if (prev2 === null){ //The second node to be swapped is the head
+        prev1.nextNode = toSwap2;
+        head = toSwap1
+      } else {
+        prev1.nextNode = toSwap2;
+        prev2.nextNode = toSwap1;
+      }
+      var temp = toSwap2.nextNode;
+      toSwap2.nextNode = toSwap1.nextNode;
+      toSwap1.nextNode = temp;
+    },
+    
+    empty() {
+      head = null;
+      size = 0;
+    },
+    
+    fromArray(array) {
+      this.empty();
+      this.addArray(array);
     }
   }; //End of Object being returned
 
-
-
-
-
 }
-export {  LinkedList};
+export {  LinkedList };
